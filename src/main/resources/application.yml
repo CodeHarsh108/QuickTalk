@@ -1,0 +1,111 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+
+spring:
+  application:
+    name: chat-app
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/chatdb
+      auto-index-creation: true
+  jackson:
+    time-zone: UTC
+    default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      enabled: true
+      file-size-threshold: 2KB
+      location: ${java.io.tmpdir}
+
+file:
+  upload-dir: ./uploads
+  allowed-types:
+    - image/jpeg
+    - image/png
+    - image/gif
+    - image/webp
+    - image/jpg
+    - video/mp4
+    - video/webm
+    - video/quicktime
+    - video/x-msvideo
+    - video/x-matroska
+    - audio/mpeg
+    - audio/wav
+    - audio/ogg
+    - audio/webm
+    - application/pdf
+    - application/msword
+    - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+    - application/vnd.ms-excel
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    - application/vnd.ms-powerpoint
+    - application/vnd.openxmlformats-officedocument.presentationml.presentation
+    - text/plain
+    - text/csv
+    - application/zip
+    - application/x-zip-compressed
+    - application/octet-stream
+    - application/x-7z-compressed
+    - application/x-rar-compressed
+  max-size: 52428800
+  thumbnail-size: 200
+
+
+
+logging:
+  level:
+    com.harsh.chat: DEBUG
+    org.springframework.web: DEBUG
+
+jwt:
+  secret: ${JWT_SECRET:mySuperSecretKeyForJWTGenerationThatShouldBeAtLeast32BytesLong}
+  expiration: 86400000  # 24 hours
+  refresh-expiration: 604800000  # 7 days
+
+cors:
+  allowed-origin: http://localhost:5173
+
+websocket:
+  allowed-origin: http://localhost:5173
+  heartbeat-internal: 25000
+
+redis:
+  host: localhost
+  port: 6379
+  password:
+  timeout: 2000ms
+  lettuce:
+    pool:
+      max-active: 8
+      max-idle: 8
+      min-idle: 0
+      max-wait: -1ms
+
+cache:
+  recent-messages:
+    ttl: 300
+    max-size: 50
+  room-info:
+    ttl: 600
+  user-session:
+    ttl: 3600
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+encryption:
+  master-key: ${ENCRYPTION_MASTER_KEY:MySuperSecretMasterKeyForEncryption2026!ChangeThisInProduction}
+  algorithm: AES/GCM/NoPadding
+  key-size: 256
